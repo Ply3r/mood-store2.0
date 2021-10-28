@@ -1,30 +1,34 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { FaShoppingCart } from 'react-icons/fa';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 class ButtonCart extends Component {
   render() {
-    const { total } = this.props;
+    const { totalCart } = this.props;
     return (
       <Link
         to="/cart"
       >
-        <div>
+        <div className="cart-button-container">
           <button
             type="button"
             data-testid="shopping-cart-button"
           >
-            Carrinho de Compras
+            <FaShoppingCart />
           </button>
-          <p data-testid="shopping-cart-size">{ total }</p>
+          <p data-testid="shopping-cart-size">{ totalCart }</p>
         </div>
       </Link>
     );
   }
 }
 
-export default ButtonCart;
+const mapStateToProps = ({ totalCart }) => ({ totalCart })
+
+export default connect(mapStateToProps, null)(ButtonCart);
 
 ButtonCart.propTypes = {
-  total: PropTypes.number.isRequired,
+  totalCart: PropTypes.number.isRequired,
 };

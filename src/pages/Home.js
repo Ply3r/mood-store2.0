@@ -1,32 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { changeProducts } from '../actions';
+import { changeProducts, changeSearch } from '../actions';
 import Header from '../components/Header';
-import MainTitle from '../components/MainTItle';
-import Categories from '../components/Categories';
-import ButtonCart from '../components/ButtonCart';
 import Products from '../components/Products';
 import '../css/home.css'
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      search: '',
-    };
-  }
-  
-
-  handleSearch = ({ target: { name, value } }) => {
-    this.setState({ [name]: value }, () => this.getProducts('query'))
+  handleSearch = ({ target: { value } }) => {
+    const { changeSearch } = this.props;
+    changeSearch(value)
   }
 
   render() {
-    const { search, totalProducts } = this.props;
+    const { search } = this.props;
     return (
       <>
         <Header />
-        <MainTitle />
         <main>
           <h1 className="hero-title shop-title">Shop</h1>
           <div className="search-container">
@@ -40,19 +29,18 @@ class Home extends React.Component {
               />
             </div>
           </div>
-          <ButtonCart total={ totalProducts } />
         </main>
-        <Categories />
         <Products />
       </>
     );
   }
 }
 
-const mapStateToProps = ({ catSelected, totalProducts }) => ({ catSelected, totalProducts })
+const mapStateToProps = ({ catSelected, totalProducts, search }) => ({ catSelected, totalProducts, search })
 
 const mapDispatchToProps = (dispatch) => ({ 
-  changeProducts: (products) => dispatch(changeProducts(products)) 
+  changeProducts: (products) => dispatch(changeProducts(products)),
+  changeSearch: (search) => dispatch(changeSearch(search))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

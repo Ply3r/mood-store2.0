@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { cardProduct } from '../funcs';
+import { cardProduct, setTotalItens } from '../funcs';
 import { getProductsFromCategory, getProductsFromQuery } from '../services/api';
 import { connect } from 'react-redux';
-import { changeProducts } from '../actions';
+import { changeProducts, changeTotalItens } from '../actions';
 
 class Products extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      setTotalItens: setTotalItens.bind(this),
+    }
+  }
+
   componentDidMount() {
     this.getProducts()
   }
 
   componentDidUpdate(Props) {
-    const { catSelected } = this.props;
-    if (Props.catSelected !== catSelected) {
+    const { catSelected, search } = this.props;
+    if (Props.catSelected !== catSelected || Props.search !== search) {
       this.getProducts();
     }
   }
@@ -29,10 +36,11 @@ class Products extends Component {
   }
 
   render() {
-    const { products, getTotalItens } = this.props;
+    const { setTotalItens } = this.state;
+    const { products } = this.props;
     return (
       <div>
-        { products.length && cardProduct(products, getTotalItens)}
+        { products.length && cardProduct(products, setTotalItens)}
       </div>
     );
   }
@@ -41,7 +49,8 @@ class Products extends Component {
 const mapStateToProps = ({ products, search, catSelected }) => ({ products, search, catSelected })
 
 const mapDispatchToProps = (dispatch) => ({
-  changeProducts: (products) => dispatch(changeProducts(products))
+  changeProducts: (products) => dispatch(changeProducts(products)),
+  changeTotalItens: (total) => dispatch(changeTotalItens(total))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Products)

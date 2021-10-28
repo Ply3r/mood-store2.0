@@ -16,19 +16,38 @@ header > a {
 
 header nav {
   height: 100%;
-  width: 15%;
+  width: 30%;
   display: flex;
   align-items: center;
 }
 
 header nav a {
-  width: 50%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+header nav .categories-header-container {
+  width: 100%;
+}
+
+header nav .categories-header-container h3 {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.5em;
+  text-align: center;
+  transition: .5s ease;
+  cursor: pointer;
+}
+
+header nav .categories-header-container h3:hover {
+  color: white;
 }
 
 header nav a h3 {
   color: rgba(255, 255, 255, 0.6);
   font-size: 1.5em;
   transition: .5s ease;
+  text-align: center;
 }
 
 header nav a h3:hover {
@@ -46,4 +65,34 @@ header nav a h3:hover {
   height: 50%;
   border-radius: 50%;
   margin-right: 5px;
+}
+
+.cart-button-container {
+  cursor: pointer;
+  width: 100px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 50px;
+}
+
+.cart-button-container button {
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--main-color);
+  color: white;
+  font-size: 1.5em;
+  border: none;
+}
+
+.cart-button-container p {
+  width: 40px;
+  text-align: center;
+  color: var(--main-color);
+  font-size: 1.5em;
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getCategories } from '../services/api';
 import { changeCategory } from '../actions';
+import '../css/categories.css';
 
 class Categories extends Component {
   constructor(props) {
@@ -43,11 +44,19 @@ class Categories extends Component {
   }
 
   render() {
+    const { show, onMouseLeave } = this.props;
     const { categories } = this.state
     return (
-      <div>
-        { categories.length && this.mapCategories() }
-      </div>
+      <>
+      { show && 
+        <div
+          onMouseLeave={ onMouseLeave }
+          className="categories-container"
+        >
+          { categories.length && this.mapCategories() }
+        </div> 
+      }
+      </>
     );
   }
 }
