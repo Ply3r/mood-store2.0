@@ -33,6 +33,7 @@ class ProductItem extends Component {
           <img src={ thumbnail } alt={ title } />
           <div className="product-information">
             <h2>{`R$: ${price} `}</h2>
+            <p>12x de R${ (price / 12).toFixed(2) }</p>
             { freeShipping && <p className="frete">Frete Gratis</p>}
             <p>{title}</p>
           </div>

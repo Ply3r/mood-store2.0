@@ -40,6 +40,7 @@ export function removeItem(name) {
 }
 
 export function cardProduct(products, callback) {
+  console.log(products)
   const elemnts = products
     .map(({
       id,
