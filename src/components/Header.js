@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import MainTitle from './MainTItle';
 import Categories from './Categories';
 import ButtonCart from './ButtonCart';
 import '../css/header.css';
@@ -51,7 +50,9 @@ class Header extends Component {
             </Link>
           </nav>
         </header>
-        <MainTitle />
+        <div className="main-title-container">
+          <h1 className="hero-title">Mood Store</h1>
+        </div>
       </>
     )
   }

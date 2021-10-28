@@ -4,6 +4,7 @@ import { cardProduct, setTotalItens } from '../funcs';
 import { getProductsFromCategory, getProductsFromQuery } from '../services/api';
 import { connect } from 'react-redux';
 import { changeProducts, changeTotalItens } from '../actions';
+import '../css/products.css'
 
 class Products extends Component {
   constructor(props) {
@@ -39,8 +40,10 @@ class Products extends Component {
     const { setTotalItens } = this.state;
     const { products } = this.props;
     return (
-      <div>
-        { products.length && cardProduct(products, setTotalItens)}
+      <div className="products-container">
+        <div className="flex-container">
+          { products.length && cardProduct(products, setTotalItens)}
+        </div>
       </div>
     );
   }
@@ -57,5 +60,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(Products)
 
 Products.propTypes = {
   products: PropTypes.arrayOf(PropTypes.object).isRequired,
-  getTotalItens: PropTypes.func.isRequired,
+  search: PropTypes.string.isRequired,
+  catSelected: PropTypes.string.isRequired,
+  changeProducts: PropTypes.func.isRequired,
+  changeTotalItens: PropTypes.func.isRequired,
 };

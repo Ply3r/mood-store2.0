@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ProductItem from './components/ProductItem';
 
 export function getInput({ target: { name, value } }) {
   this.setState({ [name]: value });
@@ -22,7 +23,8 @@ export function addToLocalStorage(obj, key) {
   const jsonItens = localStorage.getItem(key);
   if (jsonItens) {
     const arrayOfProducts = JSON.parse(jsonItens);
-    const jsonOfIds = JSON.stringify([...arrayOfProducts, obj]);
+    const filteredArray = arrayOfProducts.filter(({ id }) => obj.id !== id)
+    const jsonOfIds = JSON.stringify([...filteredArray, obj]);
     localStorage.setItem(key, jsonOfIds);
   } else {
     const jsonOfId = JSON.stringify([obj]);
@@ -39,35 +41,21 @@ export function removeItem(name) {
 
 export function cardProduct(products, callback) {
   const elemnts = products
-    .map(({ id, title, price, thumbnail, available_quantity: availableQuantity }) => (
-      <div key={ id } id={ id } data-testid="product">
-        <Link
-          to={ `/product/${id}` }
-          data-testid="product-detail-link"
-        >
-          <h2 data-testid="shopping-cart-product-name">{title}</h2>
-        </Link>
-        <img src={ thumbnail } alt={ title } />
-        <p>
-          {`R$: ${price} `}
-        </p>
-        <p data-testid="shopping-cart-product-quantity">
-          {availableQuantity}
-        </p>
-        <button
-          type="button"
-          data-testid="product-add-to-cart"
-          onClick={ () => {
-            addToLocalStorage({
-              id,
-              quantity: 1,
-            }, 'cartItem');
-            callback();
-          } }
-        >
-          Add Cart
-        </button>
-      </div>
+    .map(({
+      id,
+      title,
+      price,
+      thumbnail,
+      shipping: { free_shipping: freeShipping }
+    }) => (
+      <ProductItem
+        id={ id }
+        title={ title }
+        price={ price }
+        thumbnail={ thumbnail }
+        freeShipping={ freeShipping }
+        callback={ callback }
+      />
     ));
   return elemnts;
 }

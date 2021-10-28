@@ -8,7 +8,7 @@
   flex-direction: column;
   flex-wrap: wrap;
   background-color: #333;
-  border-radius: 15px;
+  border-radius: 5px;
   overflow: hidden;
   padding: 15px;
   animation: aparecer 1s ease;
