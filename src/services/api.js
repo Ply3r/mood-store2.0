@@ -3,7 +3,7 @@ export const getCategories = async () => (
     .then((res) => res.json())
 );
 
-export const getProductsById = (ids) => {
+export const getProductsById = async (ids) => {
   const strIds = ids.join(',');
   return fetch(`https://api.mercadolibre.com/items?ids=${strIds}`)
     .then((res) => res.json());

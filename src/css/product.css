@@ -113,6 +113,12 @@
   color: #0069D9;
 }
 
+.loading-container {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
 .review-bot {
   margin: 15px 0;
 }

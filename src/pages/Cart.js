@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
+import { getProductsById } from '../services/api'; 
 import { getLocalStorageItens, removeItem } from '../funcs';
 
 class Cart extends Component {
@@ -17,22 +18,32 @@ class Cart extends Component {
 
   deleteBtn = ({ target: { name } }) => {
     removeItem(name);
-    const arrayOfProducts = getLocalStorageItens('cartItem');
-    this.setState({ products: arrayOfProducts });
+    this.getProducts()
   }
 
   getProducts = async () => {
     const arrayOfProducts = await getLocalStorageItens('cartItem');
     if (arrayOfProducts !== null) {
-      this.setState({ products: arrayOfProducts });
+      const ids = arrayOfProducts.reduce((acc, { id }) => {
+        acc.push(id)
+        return acc
+      }, [])
+      const products = await getProductsById(ids);
+      this.setState({ products })
     }
   }
 
   cartItem = (products) => {
-    const elemnts = products.map((produto) => (
-      <div key={ produto.name }>
-        <CartItem { ...produto } />
-        <button type="button" name={ produto.name } onClick={ this.deleteBtn }>X</button>
+    console.log(products)
+    const elemnts = products.map(({ body: { title, available_quantity: availableQuantity, id, price } }) => (
+      <div key={ title }>
+        <CartItem
+          price={ price }
+          id={ id }
+          title={ title }
+          availableQuantity={ availableQuantity }
+        />
+        <button type="button" name={ id } onClick={ this.deleteBtn }>X</button>
       </div>
     ));
     return (

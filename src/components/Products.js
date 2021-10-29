@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Loading from './Loading';
 import { cardProduct, setTotalItens } from '../funcs';
 import { getProductsFromCategory, getProductsFromQuery } from '../services/api';
 import { connect } from 'react-redux';
@@ -10,6 +11,7 @@ class Products extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       setTotalItens: setTotalItens.bind(this),
     }
   }
@@ -27,24 +29,31 @@ class Products extends Component {
 
   getProducts = async () => {
     const { catSelected, changeProducts, search } = this.props;
+    this.setState({ loading: true })
     if (search) {
       const products = await getProductsFromQuery(search);
       changeProducts(products.results)
     } else {
+      this.setState({ loading: true })
       const products = await getProductsFromCategory(catSelected);
       changeProducts(products.results)
     }
+    this.setState({ loading: false })
   }
 
   render() {
-    const { setTotalItens } = this.state;
+    const { setTotalItens, loading } = this.state;
     const { products } = this.props;
     return (
-      <div className="products-container">
-        <div className="flex-container">
-          { products.length && cardProduct(products, setTotalItens)}
+      <>
+      { loading ? <Loading /> : 
+        <div className="products-container">
+          <div className="flex-container">
+            { products.length && cardProduct(products, setTotalItens)}
+          </div>
         </div>
-      </div>
+      }
+      </>
     );
   }
 }

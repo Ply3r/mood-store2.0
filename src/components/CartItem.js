@@ -17,21 +17,21 @@ class CartItem extends Component {
   }
 
   getQuantity = () => {
-    const { name } = this.props;
+    const { id } = this.props;
     const { quantity } = getLocalStorageItens('cartItem')
-      .find((produto) => produto.name === name);
+      .find((produto) => produto.id === id);
     this.setState({ quantity });
   }
 
   handleChange = ({ target: { name } }) => {
-    const { maxQuantity } = this.props;
+    const { availableQuantity } = this.props;
     const { quantity } = this.state;
     let disabledAdd = false;
     let disabledRemove = false;
     let quantidadeAtual = quantity;
     if (name === 'add') {
-      if (quantity >= maxQuantity) {
-        quantidadeAtual = maxQuantity;
+      if (quantity >= availableQuantity) {
+        quantidadeAtual = availableQuantity;
         disabledAdd = true;
       } else {
         quantidadeAtual += 1;
@@ -52,20 +52,20 @@ class CartItem extends Component {
 
   addQuantityToLocalStorage = () => {
     const { quantity } = this.state;
-    const { name } = this.props;
+    const { id } = this.props;
     const product = getLocalStorageItens('cartItem')
-      .find((produto) => produto.name === name);
+      .find((produto) => produto.id === id);
     product.quantity = quantity;
-    removeItem(name);
+    removeItem(id);
     addToLocalStorage(product, 'cartItem');
   }
 
   render() {
-    const { name, price } = this.props;
+    const { title, price } = this.props;
     const { quantity, disabledAdd, disabledRemove } = this.state;
     return (
-      <div key={ name }>
-        <h2 data-testid="shopping-cart-product-name">{ name }</h2>
+      <div key={ title }>
+        <h2 data-testid="shopping-cart-product-name">{ title }</h2>
         <p data-testid="shopping-cart-product-quantity">{ quantity }</p>
         <p>{ price }</p>
         <button
@@ -96,7 +96,7 @@ class CartItem extends Component {
 export default CartItem;
 
 CartItem.propTypes = {
-  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  maxQuantity: PropTypes.number.isRequired,
+  availableQuantity: PropTypes.number.isRequired,
 };
