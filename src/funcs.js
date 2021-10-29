@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ProductItem from './components/ProductItem';
+import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 
 export function getInput({ target: { name, value } }) {
   this.setState({ [name]: value });
@@ -19,11 +19,39 @@ export function setTotalItens() {
   changeTotalItens(totalProducts);
 }
 
+export function saveRating({ target }) {
+  const { value } = target.closest('button')
+  this.setState({ rating: value })
+}
+
+export function stars(callback) {
+  const { rating } = this.state;
+  let ratingButtons = [];
+  for(let c = 0; c < 5; c += 1) {
+    ratingButtons.push(
+      <button
+        key={`rateButton${c + 1}`}
+        onClick={ (event) => {
+          event.preventDefault();
+          callback(event);
+        } }
+        value={c + 1}
+      >
+        { rating > c ? <AiFillStar /> : <AiOutlineStar /> }
+      </button>
+    )
+  }
+  return ratingButtons;
+}
+
 export function addToLocalStorage(obj, key) {
   const jsonItens = localStorage.getItem(key);
   if (jsonItens) {
     const arrayOfProducts = JSON.parse(jsonItens);
-    const filteredArray = arrayOfProducts.filter(({ id }) => obj.id !== id)
+    let filteredArray = arrayOfProducts.filter(({ id }) => obj.id !== id);
+    if (key === 'review') {
+      filteredArray = arrayOfProducts.filter(({ userEmail }) => obj.userEmail !== userEmail);
+    }
     const jsonOfIds = JSON.stringify([...filteredArray, obj]);
     localStorage.setItem(key, jsonOfIds);
   } else {
@@ -40,7 +68,6 @@ export function removeItem(name) {
 }
 
 export function cardProduct(products, callback) {
-  console.log(products)
   const elemnts = products
     .map(({
       id,

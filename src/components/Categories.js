@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getCategories } from '../services/api';
-import { changeCategory } from '../actions';
+import { changeCategory, changeSearch } from '../actions';
 import '../css/categories.css';
 
 class Categories extends Component {
@@ -22,9 +23,10 @@ class Categories extends Component {
   }
 
   getCategoryId = async ({ target }) => {
-    const { changeCategory } = this.props;
+    const { changeCategory, changeSearch } = this.props;
     const { id } = target.closest('button');
     changeCategory(id);
+    changeSearch('');
   }
 
   mapCategories = () => {
@@ -49,12 +51,14 @@ class Categories extends Component {
     return (
       <>
       { show && 
-        <div
-          onMouseLeave={ onMouseLeave }
-          className="categories-container"
-        >
-          { categories.length && this.mapCategories() }
-        </div> 
+        <Link to="/">
+          <div
+            onMouseLeave={ onMouseLeave }
+            className="categories-container"
+          >
+            { categories.length && this.mapCategories() }
+          </div>
+        </Link>
       }
       </>
     );
@@ -63,6 +67,7 @@ class Categories extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   changeCategory: (id) => dispatch(changeCategory(id)),
+  changeSearch: (search) => dispatch(changeSearch(search))
 });
 
 export default connect(null, mapDispatchToProps)(Categories)

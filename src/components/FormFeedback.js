@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReviewCard from './ReviewCard';
-import { addToLocalStorage, getLocalStorageItens, getInput } from '../funcs';
+import { addToLocalStorage, getLocalStorageItens, getInput, stars, saveRating } from '../funcs';
 
 export default class FormFeedback extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
-      rating: '',
+      rating: 0,
       text: '',
       reviews: [],
       handleChange: getInput.bind(this),
+      stars: stars.bind(this),
+      saveRating: saveRating.bind(this),
     };
   }
 
@@ -23,8 +25,7 @@ export default class FormFeedback extends Component {
     const { id } = this.props;
     const reviews = getLocalStorageItens('review');
     if (!reviews) return;
-    const filteredReviews = reviews.filter(({ productId }) => productId === id);
-
+    const filteredReviews = reviews.filter((review) => review.id === id);
     this.setState({ reviews: filteredReviews });
   }
 
@@ -35,92 +36,51 @@ export default class FormFeedback extends Component {
       userEmail: email,
       userRating: rating,
       userText: text,
-      productId: id,
+      id,
     };
     addToLocalStorage(review, 'review');
+    this.loadReviews();
   }
 
   render() {
-    const { rating, reviews, handleChange } = this.state;
+    const { stars, saveRating, reviews, email, handleChange } = this.state;
+    
     return (
       <>
-        <form>
-          <p>Avaliação do produto</p>
+        <form className="form-container">
+          <h1>Avaliação do produto</h1>
           <input
+            className="email"
             onChange={ handleChange }
             name="email"
             type="email"
-            placeholder="Email"
+            value={ email }
+            placeholder="Digite seu email..."
           />
-          <label htmlFor="rating">
-            <input
-              checked={ rating === '1' }
-              onChange={ handleChange }
-              type="radio"
-              name="rating"
-              value="1"
-            />
-            1
-
-          </label>
-          <label htmlFor="rating">
-            <input
-              checked={ rating === '2' }
-              onChange={ handleChange }
-              type="radio"
-              name="rating"
-              value="2"
-            />
-            2
-
-          </label>
-          <label htmlFor="rating">
-            <input
-              checked={ rating === '3' }
-              onChange={ handleChange }
-              type="radio"
-              name="rating"
-              value="3"
-            />
-            3
-
-          </label>
-          <label htmlFor="rating">
-            <input
-              checked={ rating === '4' }
-              onChange={ handleChange }
-              type="radio"
-              name="rating"
-              value="4"
-            />
-            4
-
-          </label>
-          <label htmlFor="rating">
-            <input
-              checked={ rating === '5' }
-              onChange={ handleChange }
-              type="radio"
-              name="rating"
-              value="5"
-            />
-            5
-
-          </label>
-          <div>
-            <textarea
-              type="text"
-              name="text"
-              placeholder="Mensagem (opcional)"
-              data-testid="product-detail-evaluation"
-              onChange={ handleChange }
-            />
-
+          <h3>Digite sua avaliação do produto</h3>
+          <div className="avaliation-container">
+            { stars(saveRating) }
           </div>
-          <button type="button" onClick={ this.saveReview }>Avaliar</button>
-
+          <h3>Descrição do produto:</h3>
+          <textarea
+            type="text"
+            name="text"
+            placeholder="Mensagem (opcional)"
+            data-testid="product-detail-evaluation"
+            onChange={ handleChange }
+          />     
+          <button
+            type="button"
+            className="add-cart-bot-product review-bot"
+            onClick={ (event) => {
+              event.preventDefault();
+              this.saveReview();
+            } }
+          >
+            Avaliar
+          </button>
+          { !!reviews.length && <ReviewCard reviews={ reviews } /> }
         </form>
-        <ReviewCard reviews={ reviews } />
       </>
     );
   }

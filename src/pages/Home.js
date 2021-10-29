@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { changeProducts, changeSearch } from '../actions';
 import Header from '../components/Header';
+import MainTitle from '../components/MainTitle';
 import Products from '../components/Products';
 import '../css/home.css'
 
@@ -16,6 +17,7 @@ class Home extends React.Component {
     return (
       <>
         <Header />
+        <MainTitle />
         <main>
           <h1 className="hero-title shop-title">Shop</h1>
           <div className="search-container">

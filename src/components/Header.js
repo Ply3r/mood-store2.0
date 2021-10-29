@@ -23,7 +23,6 @@ class Header extends Component {
   render() {
     const { showCart } = this.state;
     return (
-      <>
         <header>
           <Link to="/">
             <div className="logo-container">
@@ -45,15 +44,11 @@ class Header extends Component {
                 show={ showCart } 
               />
             </div>
-            <Link to="/cart">
+            <div className="categories-header-container">
               <ButtonCart />
-            </Link>
+            </div>
           </nav>
         </header>
-        <div className="main-title-container">
-          <h1 className="hero-title">Mood Store</h1>
-        </div>
-      </>
     )
   }
 }
