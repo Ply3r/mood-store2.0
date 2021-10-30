@@ -63,7 +63,6 @@ export function addToLocalStorage(obj, key) {
 export function removeItem(id) {
   const arrayOfIds = getLocalStorageItens('cartItem');
   const arrayFiltered = arrayOfIds.filter((StorageID) => StorageID.id !== id);
-  console.log(arrayFiltered)
   const jsonOfIds = JSON.stringify(arrayFiltered);
   localStorage.setItem('cartItem', jsonOfIds);
 }

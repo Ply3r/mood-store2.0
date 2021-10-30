@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getLocalStorageItens, addToLocalStorage, removeItem } from '../funcs';
+import { getLocalStorageItens, addToLocalStorage, removeItem, setTotalItens } from '../funcs';
+import { connect } from 'react-redux';
+import { changeTotalItens } from '../actions';
 
 class CartItem extends Component {
   constructor(props) {
@@ -8,12 +10,15 @@ class CartItem extends Component {
     this.state = {
       quantity: 1,
       disabledAdd: false,
-      disabledRemove: false,
+      disabledRemove: true,
+      setTotalItens: setTotalItens.bind(this),
     };
   }
 
   componentDidMount() {
+    const { setTotalItens } = this.state;
     this.getQuantity();
+    setTotalItens();
   }
 
   getQuantity = () => {
@@ -42,6 +47,9 @@ class CartItem extends Component {
         disabledRemove = true;
       } else {
         quantidadeAtual -= 1;
+        if (quantidadeAtual === 1) {
+          disabledRemove = true
+        }
       }
     }
     this.setState({
@@ -51,49 +59,61 @@ class CartItem extends Component {
   }
 
   addQuantityToLocalStorage = () => {
-    const { quantity } = this.state;
+    const { quantity, setTotalItens } = this.state;
     const { id } = this.props;
     const product = getLocalStorageItens('cartItem')
       .find((produto) => produto.id === id);
     product.quantity = quantity;
     removeItem(id);
     addToLocalStorage(product, 'cartItem');
+    setTotalItens();
   }
 
   render() {
-    const { title, price } = this.props;
+    const { title, price, thumbnail, deleteBtn, id, freeShipping } = this.props;
     const { quantity, disabledAdd, disabledRemove } = this.state;
     return (
-      <div key={ title }>
-        <h2 data-testid="shopping-cart-product-name">{ title }</h2>
-        <p data-testid="shopping-cart-product-quantity">{ quantity }</p>
-        <p>{ price }</p>
-        <button
-          type="button"
-          onClick={ this.handleChange }
-          name="add"
-          disabled={ disabledAdd }
-          data-testid="product-increase-quantity"
-        >
-          +
-
-        </button>
-        <button
-          type="button"
-          onClick={ this.handleChange }
-          name="remove"
-          disabled={ disabledRemove }
-          data-testid="product-decrease-quantity"
-        >
-          -
-
-        </button>
+      <div
+        className="cartItem"
+      >
+        <img src={ thumbnail } alt="product" />
+        <div className="cartItem-title-container">
+          <h3 data-testid="shopping-cart-product-name">{ title }</h3>
+          { freeShipping && <p className="frete">Frete Gratis</p> }
+          <button type="button" name={ id } onClick={ deleteBtn }>Excluir</button>
+        </div>
+        <div className="quantity-container">
+          <div>
+            <button
+              type="button"
+              onClick={ this.handleChange }
+              name="remove"
+              disabled={ disabledRemove }
+            >
+              -
+            </button>
+            <p data-testid="shopping-cart-product-quantity">{ quantity }</p>
+            <button
+              type="button"
+              onClick={ this.handleChange }
+              name="add"
+              disabled={ disabledAdd }
+            >
+              +
+            </button>
+          </div>
+        </div> 
+        <h2>{ `R$ ${price.toFixed(2)}` }</h2>
       </div>
     );
   }
 }
 
-export default CartItem;
+const mapDispatchToProps = (dispatch) => ({
+  changeTotalItens: (total) => dispatch(changeTotalItens(total))
+});
+
+export default connect(null, mapDispatchToProps)(CartItem);
 
 CartItem.propTypes = {
   title: PropTypes.string.isRequired,
