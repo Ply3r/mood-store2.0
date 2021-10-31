@@ -10,7 +10,7 @@ class CartItem extends Component {
     this.state = {
       quantity: 1,
       disabledAdd: false,
-      disabledRemove: true,
+      disabledRemove: false,
       setTotalItens: setTotalItens.bind(this),
     };
   }
@@ -22,14 +22,22 @@ class CartItem extends Component {
   }
 
   getQuantity = () => {
-    const { id } = this.props;
+    const { id, availableQuantity } = this.props;
     const { quantity } = getLocalStorageItens('cartItem')
       .find((produto) => produto.id === id);
-    this.setState({ quantity });
+    let disabledRemove = false;
+    let disabledAdd = false;
+    if (quantity <= 1) {
+      disabledRemove = true;
+    }
+    if (quantity >= availableQuantity) {
+      disabledAdd = true;
+    };
+    this.setState({ quantity, disabledAdd, disabledRemove });
   }
 
   handleChange = ({ target: { name } }) => {
-    const { availableQuantity } = this.props;
+    const { availableQuantity, getTotalPrice } = this.props;
     const { quantity } = this.state;
     let disabledAdd = false;
     let disabledRemove = false;
@@ -42,12 +50,12 @@ class CartItem extends Component {
         quantidadeAtual += 1;
       }
     } else if (name === 'remove') {
-      if (quantity === 1) {
+      if (quantity <= 1) {
         quantidadeAtual = 1;
         disabledRemove = true;
       } else {
         quantidadeAtual -= 1;
-        if (quantidadeAtual === 1) {
+        if (quantidadeAtual <= 1) {
           disabledRemove = true
         }
       }
@@ -55,7 +63,10 @@ class CartItem extends Component {
     this.setState({
       quantity: quantidadeAtual,
       disabledAdd,
-      disabledRemove }, this.addQuantityToLocalStorage);
+      disabledRemove }, () => {
+        this.addQuantityToLocalStorage();
+        getTotalPrice();
+      });
   }
 
   addQuantityToLocalStorage = () => {
@@ -103,7 +114,7 @@ class CartItem extends Component {
             </button>
           </div>
         </div> 
-        <h2>{ `R$ ${price.toFixed(2)}` }</h2>
+        <h2>{ `R$ ${(price * quantity).toFixed(2)}` }</h2>
       </div>
     );
   }
