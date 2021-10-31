@@ -99,6 +99,7 @@ class Cart extends Component {
           </div>
           <Link to="/checkout">
             <button
+              disabled={ !products.length }
               type="button"
               className="checkout-products"
             >

@@ -114,6 +114,6 @@
   width: 200px;
 }
 
-.checkout-products:hover {
-  background-color: #0e4e30;
+.checkout-products:disabled {
+  background-color: #4b8067;
 }
