@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getLocalStorageItens, addToLocalStorage, removeItem, setTotalItens } from '../funcs';
+import { getLocalStorageItens, addToLocalStorage, removeItem, setTotalItens, getQuantityById } from '../funcs';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { changeTotalItens } from '../actions';
@@ -24,8 +24,7 @@ class CartItem extends Component {
 
   getQuantity = () => {
     const { id, availableQuantity } = this.props;
-    const { quantity } = getLocalStorageItens('cartItem')
-      .find((produto) => produto.id === id);
+    const quantity = getQuantityById(id);
     let disabledRemove = false;
     let disabledAdd = false;
     if (quantity <= 1) {

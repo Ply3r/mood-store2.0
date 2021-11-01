@@ -1,5 +1,6 @@
 import React from 'react';
 import ProductItem from './components/ProductItem';
+import { getProductsById } from './services/api'; 
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 
 export function getInput({ target: { name, value } }) {
@@ -10,6 +11,41 @@ export function getLocalStorageItens(key) {
   const jsonOfIds = localStorage.getItem(key);
   return JSON.parse(jsonOfIds);
 }
+
+export async function getProducts() {
+  const { changeTotalItens } = this.props
+  const arrayOfProducts = await getLocalStorageItens('cartItem');
+  if (arrayOfProducts === null) return;
+  const ids = arrayOfProducts.reduce((acc, { id }) => {
+    acc.push(id)
+    return acc
+  }, [])
+  const products = await getProductsById(ids);
+  changeTotalItens(products.length)
+  this.setState({ products })
+}
+
+export function getTotalPrice() {
+  const { changeTotalPrice } = this.props;
+  const { products } = this.state;
+  if (!products.length) {
+    changeTotalPrice(0)
+    return;
+  }
+  const totalPrice = products.reduce((acc, { body: { id, price } }) => {
+    const quantity = getQuantityById(id);
+    const total = (price * quantity) + acc;
+    return total;
+  }, 0);
+  changeTotalPrice(totalPrice);
+}
+
+export function getQuantityById(id) {
+  const arrayOfIds = getLocalStorageItens('cartItem');
+  const { quantity } = arrayOfIds.find((product) => product.id === id);
+  return quantity;
+}
+
 
 export function setTotalItens() {
   const { changeTotalItens } = this.props;

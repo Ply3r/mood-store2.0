@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { getProductsById } from '../services/api'; 
-import { getLocalStorageItens, removeItem } from '../funcs';
+import { removeItem, getProducts, getTotalPrice } from '../funcs';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import CartItem from '../components/CartItem';
@@ -13,35 +12,26 @@ class Cart extends Component {
     super(props);
     this.state = {
       products: [],
+      getProducts: getProducts.bind(this),
+      getTotalPrice: getTotalPrice.bind(this),
     };
   }
 
   async componentDidMount() {
-    await this.getProducts();
-    await this.getTotalPrice();
+    const { getProducts, getTotalPrice } = this.state
+    await getProducts();
+    getTotalPrice();
   }
 
   deleteBtn = async ({ target: { name } }) => {
+    const { getProducts, getTotalPrice } = this.state
     removeItem(name);
-    await this.getProducts();
-    await this.getTotalPrice();
-  }
-
-  getProducts = async () => {
-    const { changeTotalItens } = this.props
-    const arrayOfProducts = await getLocalStorageItens('cartItem');
-    if (arrayOfProducts !== null) {
-      const ids = arrayOfProducts.reduce((acc, { id }) => {
-        acc.push(id)
-        return acc
-      }, [])
-      const products = await getProductsById(ids);
-      changeTotalItens(products.length)
-      this.setState({ products })
-    }
+    await getProducts();
+    getTotalPrice();
   }
 
   cartItem = (products) => {
+    const { getTotalPrice } = this.state;
     const elemnts = products.map(({ body: { 
       title,
       available_quantity: availableQuantity,
@@ -59,26 +49,10 @@ class Cart extends Component {
           availableQuantity={ availableQuantity }
           freeShipping={ freeShipping }
           deleteBtn={ this.deleteBtn }
-          getTotalPrice={ this.getTotalPrice }
+          getTotalPrice={ getTotalPrice }
         />
     ));
     return elemnts;
-  }
-
-  getTotalPrice = async () => {
-    const { changeTotalPrice } = this.props;
-    const { products } = this.state;
-    const arrayOfIds = await getLocalStorageItens('cartItem');
-    if (!products.length) {
-      changeTotalPrice(0)
-      return;
-    }
-    const totalPrice = products.reduce((acc, { body }) => {
-      const { quantity } = arrayOfIds.find(({ id }) => body.id === id);
-      const price = (body.price * quantity) + acc;
-      return price;
-    }, 0);
-    changeTotalPrice(totalPrice);
   }
 
   render() {

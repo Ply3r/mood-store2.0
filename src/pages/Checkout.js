@@ -1,54 +1,73 @@
 import React, { Component } from 'react';
 import Form from '../components/Form';
-import { getLocalStorageItens } from '../funcs';
+import { connect } from 'react-redux';
+import { getProducts, getQuantityById, getTotalPrice } from '../funcs';
+import { changeTotalItens, changeTotalPrice } from '../actions';
+import '../css/checkout.css';
+import Header from '../components/Header';
 
 class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
       products: [],
+      getProducts: getProducts.bind(this),
+      getTotalPrice: getTotalPrice.bind(this),
     };
   }
 
-  componentDidMount() {
-    this.getProducts();
-  }
-
-  getProducts = () => {
-    const products = getLocalStorageItens('cartItem');
-    this.setState({ products });
+  async componentDidMount() {
+    const { getProducts, getTotalPrice } = this.state;
+    await getProducts();
+    getTotalPrice();
   }
 
   mapProducts = () => {
     const { products } = this.state;
-    const elemnts = products.map(({ name, price, quantity }) => (
-      <div key={ name }>
-        <h2>{ name }</h2>
-        <p>{ price }</p>
-        <p>{ quantity }</p>
-      </div>
-    ));
+    const elemnts = products
+      .map(({ body: { title, price, id, thumbnail, shipping: { free_shipping: freeShipping } } }) => {
+        const quantity = getQuantityById(id);
+        return (
+          <div className="cartItem" key={ title }>
+            <img src={ thumbnail } alt="item" />
+            <div className="cartItem-title-container checkout-title-container">
+              <h4>{ title }</h4>
+              { freeShipping && <p className="frete">Frete Gratis</p>}
+              <p>{ `Quantidade: ${quantity}` }</p>
+            </div>
+            <h4>{ `R$ ${price.toFixed(2)}` }</h4>
+          </div>
+        )
+    });
     return elemnts;
-  }
-
-  getTotalPrice = () => {
-    const { products } = this.state;
-    const total = products.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
-    return total;
   }
 
   render() {
     const { products } = this.state;
+    const { totalPrice } = this.props;
     return (
       <>
-        <div>
-          { products.length && this.mapProducts() }
-          <p>{ products.length && `Total: ${this.getTotalPrice()}` }</p>
+        <Header />
+        <div className="page-checkout">
+          <h1 className="hero-title">Checkout</h1>
+          <div className="checkout-info-container">
+            <div className="checkout-products-container">
+              { !!products.length && this.mapProducts() }
+            </div>
+            <h2 className="checkout-total-price">{ !!products.length && `Total: ${totalPrice.toFixed(2)}` }</h2>
+          </div>
+          <Form />
         </div>
-        <Form />
       </>
     );
   }
 }
 
-export default Checkout;
+const mapStateToProps = ({ totalPrice }) => ({ totalPrice })
+
+const mapDispatchToProps = (dispatch) => ({
+  changeTotalItens: (total) => dispatch(changeTotalItens(total)),
+  changeTotalPrice: (price) => dispatch(changeTotalPrice(price)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout);
