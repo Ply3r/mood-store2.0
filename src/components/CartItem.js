@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getLocalStorageItens, addToLocalStorage, removeItem, setTotalItens } from '../funcs';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { changeTotalItens } from '../actions';
 
@@ -87,12 +88,17 @@ class CartItem extends Component {
       <div
         className="cartItem"
       >
-        <img src={ thumbnail } alt="product" />
-        <div className="cartItem-title-container">
-          <h3 data-testid="shopping-cart-product-name">{ title }</h3>
-          { freeShipping && <p className="frete">Frete Gratis</p> }
-          <button type="button" name={ id } onClick={ deleteBtn }>Excluir</button>
-        </div>
+        <Link to={`/product/${id}`}>
+          <img src={ thumbnail } alt="product" />
+          <div className="cartItem-title-container">
+            <h4 data-testid="shopping-cart-product-name">{ title }</h4>
+            { freeShipping && <p className="frete">Frete Gratis</p> }
+            <button type="button" name={ id } onClick={ (event) => {
+              event.preventDefault();
+              deleteBtn(event)
+            } }>Excluir</button>
+          </div>
+        </Link>
         <div className="quantity-container">
           <div>
             <button
