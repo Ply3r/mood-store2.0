@@ -12,9 +12,11 @@ export const getProductsById = async (ids) => {
 export const getProductsFromCategory = async (categoryId) => (
   fetch(`https://api.mercadolibre.com/sites/MLB/search?category=${categoryId}`)
     .then((res) => res.json())
+    .then(({ results }) => results )
 )
 
 export const getProductsFromQuery = async (query) => (
   fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`)
     .then((res) => res.json())
+    .then(({ results }) => results )
 );

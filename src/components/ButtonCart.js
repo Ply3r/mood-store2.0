@@ -23,7 +23,7 @@ class ButtonCart extends Component {
     const { totalCart } = this.props;
     return (
       <Link
-        to="/cart"
+        to="/mood-store2.0/cart"
       >
         <div className="cart-button-container">
           <button

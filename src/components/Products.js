@@ -32,11 +32,11 @@ class Products extends Component {
     this.setState({ loading: true })
     if (search) {
       const products = await getProductsFromQuery(search);
-      changeProducts(products.results)
+      changeProducts(products)
     } else {
       this.setState({ loading: true })
       const products = await getProductsFromCategory(catSelected);
-      changeProducts(products.results)
+      changeProducts(products)
     }
     this.setState({ loading: false })
   }

@@ -24,14 +24,14 @@ class Header extends Component {
     const { showCart } = this.state;
     return (
         <header>
-          <Link to="/">
+          <Link to="/mood-store2.0/">
             <div className="logo-container">
                 <img src="https://ply3r.github.io/portifolio_antigo/projetos/loja_de_roupa/imagens/logo.jpeg" alt="logo" />
                 <h2>Mood Store</h2>
             </div>
           </Link>
           <nav>
-            <Link to="/">
+            <Link to="/mood-store2.0/">
               <h3>Home</h3>
             </Link>
             <div

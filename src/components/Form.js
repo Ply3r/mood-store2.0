@@ -92,7 +92,7 @@ class Form extends Component {
             />
           </label>
         </div>
-        <Link to="/">
+        <Link to="/mood-store2.0/">
           <button
             onClick={ apagarItens }
             className="checkout-products checkout-page-bot"

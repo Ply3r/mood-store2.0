@@ -51,7 +51,7 @@ class Categories extends Component {
     return (
       <>
       { show && 
-        <Link to="/">
+        <Link to="/mood-store2.0/">
           <div
             onMouseLeave={ onMouseLeave }
             className="categories-container"

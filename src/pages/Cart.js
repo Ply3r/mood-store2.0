@@ -71,7 +71,7 @@ class Cart extends Component {
             </div>
             <h2 className="total-price">{ `Total: R$ ${totalPrice.toFixed(2)}` }</h2>
           </div>
-          <Link to="/checkout">
+          <Link to="/mood-store2.0/checkout">
             <button
               disabled={ !products.length }
               type="button"

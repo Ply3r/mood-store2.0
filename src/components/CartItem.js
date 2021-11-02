@@ -87,7 +87,7 @@ class CartItem extends Component {
       <div
         className="cartItem"
       >
-        <Link to={`/product/${id}`}>
+        <Link to={`/mood-store2.0/product/${id}`}>
           <img src={ thumbnail } alt="product" />
           <div className="cartItem-title-container">
             <h4 data-testid="shopping-cart-product-name">{ title }</h4>

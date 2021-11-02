@@ -13,13 +13,13 @@ class App extends React.Component {
       <Provider store={ store }>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/" component={ Home } />
-            <Route path="/cart" component={ Cart } />
+            <Route exact path="/mood-store2.0/" component={ Home } />
+            <Route exact path="/mood-store2.0/cart" component={ Cart } />
             <Route
-              path="/product/:id"
+              path="/mood-store2.0/product/:id"
               render={ (props) => <Product { ...props } /> }
             />
-            <Route path="/checkout" component={ Checkout } />
+            <Route path="/mood-store2.0/checkout" component={ Checkout } />
           </Switch>
         </BrowserRouter>
       </Provider>

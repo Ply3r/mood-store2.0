@@ -59,7 +59,7 @@ class ProductItem extends Component {
     const { showButton, inCart } = this.state;
     const {id, thumbnail, title, price, freeShipping, callback} = this.props;
     return (
-      <Link key={ id } to={ `/product/${id}` } >
+      <Link key={ id } to={ `/mood-store2.0/product/${id}` } >
         <div
           onMouseLeave={ this.onMouseLeave }
           onMouseEnter={ this.onMouseEnter }
