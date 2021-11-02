@@ -15,7 +15,10 @@ export function getLocalStorageItens(key) {
 export async function getProducts() {
   const { changeTotalItens } = this.props
   const arrayOfProducts = await getLocalStorageItens('cartItem');
-  if (arrayOfProducts === null) return;
+  if (arrayOfProducts === null) {
+    changeTotalItens(0)
+    return;
+  };
   const ids = arrayOfProducts.reduce((acc, { id }) => {
     acc.push(id)
     return acc

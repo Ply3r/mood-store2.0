@@ -42,6 +42,13 @@ class Checkout extends Component {
     return elemnts;
   }
 
+  apagarItens = async () => {
+    const array = JSON.stringify([])
+    localStorage.setItem('cartItem', array)
+    changeTotalItens(0)
+    changeTotalPrice(0)
+  }
+
   render() {
     const { products } = this.state;
     const { totalPrice } = this.props;
@@ -54,9 +61,11 @@ class Checkout extends Component {
             <div className="checkout-products-container">
               { !!products.length && this.mapProducts() }
             </div>
-            <h2 className="checkout-total-price">{ !!products.length && `Total: ${totalPrice.toFixed(2)}` }</h2>
+            <h2 className="checkout-total-price">{ !!products.length && `Total: R$ ${totalPrice.toFixed(2)}` }</h2>
           </div>
-          <Form />
+          <Form
+            apagarItens={ this.apagarItens }
+          />
         </div>
       </>
     );
