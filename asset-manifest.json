@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/mood-store2.0/static/css/main.31cc85fe.chunk.css",
+    "main.js": "/mood-store2.0/static/js/main.ad5b15d1.chunk.js",
+    "main.js.map": "/mood-store2.0/static/js/main.ad5b15d1.chunk.js.map",
+    "runtime-main.js": "/mood-store2.0/static/js/runtime-main.17834ea6.js",
+    "runtime-main.js.map": "/mood-store2.0/static/js/runtime-main.17834ea6.js.map",
+    "static/js/2.d5583729.chunk.js": "/mood-store2.0/static/js/2.d5583729.chunk.js",
+    "static/js/2.d5583729.chunk.js.map": "/mood-store2.0/static/js/2.d5583729.chunk.js.map",
+    "index.html": "/mood-store2.0/index.html",
+    "precache-manifest.96295b509f77cc136510b661930eb18a.js": "/mood-store2.0/precache-manifest.96295b509f77cc136510b661930eb18a.js",
+    "service-worker.js": "/mood-store2.0/service-worker.js",
+    "static/css/main.31cc85fe.chunk.css.map": "/mood-store2.0/static/css/main.31cc85fe.chunk.css.map",
+    "static/js/2.d5583729.chunk.js.LICENSE.txt": "/mood-store2.0/static/js/2.d5583729.chunk.js.LICENSE.txt",
+    "static/media/loading.gif": "/mood-store2.0/static/media/loading.5b5a277c.gif"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.17834ea6.js",
+    "static/js/2.d5583729.chunk.js",
+    "static/css/main.31cc85fe.chunk.css",
+    "static/js/main.ad5b15d1.chunk.js"
+  ]
+}
