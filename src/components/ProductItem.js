@@ -1,26 +1,62 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { addToLocalStorage } from '../funcs';
+import { connect } from 'react-redux';
+import { addToLocalStorage, getLocalStorageItens, removeItem, setTotalItens } from '../funcs';
+import { changeTotalItens } from '../actions';
 import { FaCartPlus } from 'react-icons/fa'
+import { BsCartCheckFill } from "react-icons/bs";
 
 class ProductItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      inCart: false,
       showButton: false,
+      setTotalItens: setTotalItens.bind(this)
+    }
+  }
+
+  componentDidMount() {
+    this.isProductInCart();
+  }
+
+  isProductInCart = () => {
+    const { id } = this.props
+    const cartItens = getLocalStorageItens('cartItem');
+    if (!cartItens) return;
+    const product = cartItens.find((product) => product.id === id);
+    if (product) {
+      this.setState({ inCart: true, showButton: false })
     }
   }
 
   onMouseEnter = () => {
-    this.setState({ showButton: true })
+    const { inCart } = this.state;
+    if (!inCart) {
+      this.setState({ showButton: true })
+    }
   }
 
   onMouseLeave = () => {
-    this.setState({ showButton: false })
+    const { inCart } = this.state;
+    if (!inCart) {
+      this.setState({ showButton: false })
+    }
+  }
+
+  addItemCart = () => {
+    this.setState({ inCart: true, showButton: false })
+  }
+
+  removeItemCart = (id) => {
+    const { setTotalItens } = this.state;
+    removeItem(id);
+    setTotalItens();
+    this.setState({ inCart: false, showButton: true })
   }
 
   render() {
-    const { showButton } = this.state;
+    const { showButton, inCart } = this.state;
     const {id, thumbnail, title, price, freeShipping, callback} = this.props;
     return (
       <Link key={ id } to={ `/product/${id}` } >
@@ -37,6 +73,16 @@ class ProductItem extends Component {
             { freeShipping && <p className="frete">Frete Gratis</p>}
             <p>{title}</p>
           </div>
+          { inCart && 
+          <button
+            type="button"
+            onClick={ (event) => {
+              event.preventDefault();
+              this.removeItemCart(id)
+            }}
+          >
+            <BsCartCheckFill />
+          </button> }
           { showButton && 
             <button
             type="button"
@@ -47,6 +93,7 @@ class ProductItem extends Component {
                 quantity: 1,
               }, 'cartItem');
               callback();
+              this.addItemCart();
             } }
             >
               <FaCartPlus />
@@ -58,4 +105,8 @@ class ProductItem extends Component {
   }
 }
 
-export default ProductItem;
+const mapDispatchToProps = (dispatch) => ({
+  changeTotalItens: (total) => dispatch(changeTotalItens(total))
+})
+
+export default connect(null, mapDispatchToProps)(ProductItem)
